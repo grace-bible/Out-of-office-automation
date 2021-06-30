@@ -13,6 +13,12 @@ const Approval = {
   NotApproved: 'Not approved',
 };
 
+function onOpen() {
+  SpreadsheetApp.getUi()
+      .createMenu('🏝 Vacation')
+      .addItem('Notify employees', 'data')
+      .addToUi();
+}
 
 function formSetup() {
   let sheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -101,7 +107,7 @@ function process(row) {
 
     CalendarApp.getCalendarById("c_phbb5q70vllatui1at9kfrs3os@group.calendar.google.com")
       .createAllDayEvent(
-          name + ' on Vacation',
+          name + ' on vacation',
           startDate,
           endDate,
           {
