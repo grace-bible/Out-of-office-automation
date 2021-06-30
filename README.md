@@ -37,30 +37,23 @@ function formSetup() {
   form.addTextItem().setTitle(Header.Name).setRequired(true);
   form.addDateItem().setTitle(Header.StartDate).setRequired(true);
   form.addDateItem().setTitle(Header.EndDate).setRequired(true);
-  columnSetup()
-}
+  
+  const [formSheet] = formSpreadsheet.getSheets().filter((sheet) => {
+      // Returns the URL of the associated Google form
+      // that is sending its user responses to this sheet
+      let range = sheet.getRange(1, sheet.getLastColumn() + 1);
 
-function columnSetup() {
-  let sheet = SpreadsheetApp.getActiveSheet();
+      // Create the header header name.
+      range.setValue(Header.Approval);
 
-  appendColumn(sheet, Header.Approval, Object.values(Approval));
-}
-
-function appendColumn(sheet, headerName, maybeChoices) {
-  let range = sheet.getRange(1, sheet.getLastColumn() + 1);
-
-  // Create the header header name.
-  range.setValue(headerName);
-
-  // If we pass choices to the function, create validation rules.
-  if (maybeChoices) {
-    let rule = SpreadsheetApp.newDataValidation()
-        .requireValueInList(maybeChoices)
+      // If we pass choices to the function, create validation rules.
+      let rule = SpreadsheetApp.newDataValidation()
+        .requireValueInList(Object.values(Approval))
         .build();
 
-    range.offset(sheet.getFrozenRows(), 0, sheet.getMaxRows())
+      range.offset(sheet.getFrozenRows(), 0, sheet.getMaxRows())
         .setDataValidation(rule);
-  }
+    });
 }
 
 function asObject(headers, rowArray, rowIndex) {
