@@ -37,7 +37,6 @@ function formSetup() {
   form.addTextItem().setTitle(Header.Name).setRequired(true);
   form.addDateItem().setTitle(Header.StartDate).setRequired(true);
   form.addDateItem().setTitle(Header.EndDate).setRequired(true);
-  form.addListItem().setTitle(Header.Reason).setChoiceValues(Object.values(Reason)).setRequired(true);
   columnSetup()
 }
 
