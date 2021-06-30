@@ -1,7 +1,7 @@
 ```js
 const Header = {
-  Timestamp: 'Time-stamp',
-  EmailAddress: 'Email',
+  Tidsstempel: 'Tidsstempel',
+  Mailadresse: 'Mailadresse',
   Name: 'Name',
   StartDate: 'Start date',
   EndDate: 'End date',
@@ -81,7 +81,7 @@ function data(){
 
 function process(row) {
   let name = row[Header.Name];
-  let email = row[Header.EmailAddress];
+  let email = row[Header.Mailadresse];
   let startDate = row[Header.StartDate];
   let endDate = row[Header.EndDate];
   let approval = row[Header.Approval];
@@ -94,8 +94,6 @@ function process(row) {
 
     let subject = 'Your vacation time request was NOT approved';
     MailApp.sendEmail(email, subject, message);
-
-    Logger.log(`Not approved, email sent, row=${JSON.stringify(row)}`);
   }
 
   else if (approval == Approval.Approved) {
@@ -113,8 +111,6 @@ function process(row) {
     // Send a confirmation email.
     let subject = 'Confirmed, your vacation time request has been approved!';
     MailApp.sendEmail(email, subject, message);
-
-    Logger.log(`Approved, calendar event created, row=${JSON.stringify(row)}`);
   }
 
   return row;
