@@ -37,7 +37,10 @@ function formSetup() {
   form.addTextItem().setTitle(Header.Name).setRequired(true);
   form.addDateItem().setTitle(Header.StartDate).setRequired(true);
   form.addDateItem().setTitle(Header.EndDate).setRequired(true);
-  
+  const destinationId = form.getDestinationId();
+
+  // Open the Google Workbook and iterate through each sheet
+  const formSpreadsheet = SpreadsheetApp.openById(destinationId);
   const [formSheet] = formSpreadsheet.getSheets().filter((sheet) => {
       // Returns the URL of the associated Google form
       // that is sending its user responses to this sheet
