@@ -1,5 +1,5 @@
-## Time-off-request-app for Google Sheet
+# Time-off-request-app for Google Sheet
 
 
-# with my own touch 
+### with my own touch 
 
