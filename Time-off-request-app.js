@@ -104,7 +104,7 @@ function process(row) {
   else if (approval == Approval.Approved) {
     // If approved, create a calendar event.
 
-    CalendarApp.getCalendarById("c_phbb5q70vllatui1at9kfrs3os@group.calendar.google.com")
+    CalendarApp.getCalendarById("")
       .createAllDayEvent(
           name + ' on vacation',
           startDate,
