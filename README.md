@@ -4,7 +4,7 @@
 ### with my own touch 
 
 
-Rember to set your clander id in  
-''' js 
+Rember to set your calendar id in 
+``` js 
 CalendarApp.getCalendarById("")
-'''
+```
