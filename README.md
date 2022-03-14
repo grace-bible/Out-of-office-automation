@@ -3,3 +3,8 @@
 
 ### with my own touch 
 
+
+Rember to set your clander id in  
+''' js 
+CalendarApp.getCalendarById("")
+'''
