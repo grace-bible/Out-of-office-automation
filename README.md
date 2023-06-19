@@ -34,6 +34,6 @@ This is a time-off request application built for Google Sheets. It allows employ
 
 ## Disclaimer
 
-his application was created to demonstrate the basic functionality of a time-off request system using Google Sheets, Google Forms, and Google Apps Script. It is recommended to review and modify the code as per your specific requirements and ensure compliance with your organization's policies and guidelines.
+This application was created to demonstrate the basic functionality of a time-off request system using Google Sheets, Google Forms, and Google Apps Script. It is recommended to review and modify the code as per your specific requirements and ensure compliance with your organization's policies and guidelines.
 
 For more information and support, please refer to the Google Apps Script documentation and the Google Sheets Help Center.
