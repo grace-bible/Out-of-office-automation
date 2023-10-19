@@ -214,7 +214,7 @@ function process(row) {
   let email = row[Header.EmailAddress];
   let name = row[Header.FullName];
   let supervisor = row[Header.SuperAddress];
-  let replyall = `${supervisor},hr@grace-bible.org`; 
+  let replyall = `${supervisor}, hr@grace-bible.org`;
   let campus = row[Header.Campus];
   let guestEmails = `${OOOcal}`;
   let today = new Date();
