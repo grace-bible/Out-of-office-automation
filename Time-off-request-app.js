@@ -19,7 +19,7 @@ const Header = {
   EmailAddress: 'Email Address',
   Campus: 'Campus',
   StartDate: 'Start date',
-  EndDate: 'Return date',
+  EndDate: 'End date',
   Reason: 'Reason',
   Description: 'Brief description',
   SuperAddress: 'Supervisor email',
@@ -217,7 +217,7 @@ function process(row) {
     // Create a new variable to store the incremented date.
     let incrementEndDate = new Date(endDate);
     // Increment the `incrementStartDate` variable by 1 day.
-    incrementEndDate.setDate(incrementEndDate.getDate() + 1);
+    incrementEndDate.setDate(incrementEndDate.getDate() + 2);
   let reason = row[Header.Reason];
   let description = row[Header.Description];
   let superApproval = (row[Header.SupervisorApproval]);
