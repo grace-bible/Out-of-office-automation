@@ -235,7 +235,8 @@ function process(row) {
   let superApproval = (row[Header.SupervisorApproval]);
   let hrApproval = (row[Header.HRApproval]);
   let eventName = `${name} - ${reason}`;
-  let eventDescription = `${superApproval} by ${supervisor} on ${month}-${day}-${year}\n\n`
+  let eventDescription = `${superApproval} by ${supervisor}\n`
+      + `Submitted on ${month}-${day}-${year}\n\n`
       + `${description}`;
   let message = `Your ${reason} request was ${hrApproval} for `
       + `${startDate.toDateString()} to `
