@@ -239,9 +239,9 @@ function process(row) {
   let eventDescription = `${superApproval} by ${supervisor}\n`
       + `Submitted on ${month}-${day}-${year}\n\n`
       + `${description}`;
-  let message = `${name} has requested supervisor-approved ${reason} out-of-office (OOO) from ${startDate.toDateString()} until ${endDate.toDateString()}\n\n`
+  let message = `${name} has requested supervisor-approved ${reason} out-of-office from ${startDate.toDateString()} until ${endDate.toDateString()}\n\n`
       + `Reason: ${reason}\n\n`
-      + `${description}`
+      + `${description}\n\n`
       + `To discuss this request, "Reply All" to include Human Resources, the Supervisor, and the Employee on the thread.`;
 
   // /* Check if the user has a calendar. */
