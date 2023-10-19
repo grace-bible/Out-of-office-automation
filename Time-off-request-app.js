@@ -42,6 +42,8 @@ const Campus = {
   SYS: 'System',
 };
 
+const OOOcal = 'grace-bible.org_323330343338383235@resource.calendar.google.com'
+
 const SupervisorApproval = {
   Approved: 'Approved',
   NotApproved: 'Not approved',
@@ -92,8 +94,10 @@ function formSetup() {
       .setCollectEmail(true)
       .setDestination(FormApp.DestinationType.SPREADSHEET, sheet.getId())
       .setLimitOneResponsePerUser(false);
+  
+  let validation = FormApp.createTextValidation().setHelpText(`Please use Title Case and proper punctuation for your name.`).requireTextContainsPattern(`^([A-Z]{1}[a-z0-9\- ']{1,}\.?\s?)+[A-Z]{1}[a-z0-9\- ']{1,}$`)
 
-  form.addTextItem().setTitle(Header.FullName).setRequired(true);
+  form.addTextItem().setTitle(Header.FullName).setValidation(validation).setRequired(true);
   form.addListItem().setTitle(Header.Campus).setChoiceValues(Object.values(Campus)).setRequired(false);
   form.addDateItem().setTitle(Header.StartDate).setRequired(true);
   form.addDateItem().setTitle(Header.EndDate).setRequired(true);
@@ -111,7 +115,6 @@ function formSetup() {
   .setRequired(true);
 }
 
-
 /**
  * Creates an "HR Approved" and "Calendar event status" column
  */
@@ -121,7 +124,6 @@ function columnSetup() {
   appendColumn(sheet, Header.HRApproval, Object.values(HRApproval));
   appendColumn(sheet, Header.EventCreated, Object.values(EventCreated));
 }
-
 
 /**
  * Appends a new column.
@@ -205,7 +207,7 @@ function process(row) {
   let email = row[Header.EmailAddress];
   let name = row[Header.FullName];
   let supervisor = row[Header.SuperAddress];
-  let guestEmails = `grace-bible.org_323330343338383235@resource.calendar.google.com,`;
+  let guestEmails = `${OOOcal}`;
   let startDate = row[Header.StartDate];
     // Create a new variable to store the incremented date.
     let incrementStartDate = new Date(startDate);
