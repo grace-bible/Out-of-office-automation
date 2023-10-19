@@ -42,6 +42,13 @@ const Campus = {
   SYS: 'System',
 };
 
+/**
+ * AND = grace-bible.org_qpq142rs3q8ujjovg633e5uhlg@group.calendar.google.com
+ * CRK = grace-bible.org_nviveqkhsmbdqtiasj2nokl1pg@group.calendar.google.com
+ * MT = c_uh7mlh14u22ui24sncqmrm3rrs@group.calendar.google.com
+ * SW = grace-bible.org_4rtpbu8ot1fdsf5i7sl3dvkl2k@group.calendar.google.com
+ */
+
 const OOOcal = 'grace-bible.org_323330343338383235@resource.calendar.google.com'
 
 const SupervisorApproval = {
@@ -207,7 +214,9 @@ function process(row) {
   let email = row[Header.EmailAddress];
   let name = row[Header.FullName];
   let supervisor = row[Header.SuperAddress];
+  let campus = row[Header.Campus];
   let guestEmails = `${OOOcal}`;
+  let today = new Date();
   let startDate = row[Header.StartDate];
     // Create a new variable to store the incremented date.
     let incrementStartDate = new Date(startDate);
@@ -223,7 +232,7 @@ function process(row) {
   let superApproval = (row[Header.SupervisorApproval]);
   let hrApproval = (row[Header.HRApproval]);
   let eventName = `${name} - ${reason}`;
-  let eventDescription = `${superApproval} by ${supervisor}\n\n`
+  let eventDescription = `${superApproval} by ${supervisor} on ${today}\n\n`
       + `${description}`;
   let message = `Your ${reason} request was ${hrApproval} for `
       + `${startDate.toDateString()} to `
