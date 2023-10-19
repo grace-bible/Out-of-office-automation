@@ -156,18 +156,11 @@ function appendColumn(sheet, headerName, maybeChoices) {
   }
 }
 
-function createHourlyTrigger() {
-  ScriptApp.newTrigger('processRows')
-    .timeBased()
-    .everyHours(1)
-    .create();
-}
-
 /**
 * Checks the creation status of each entry and, if not created,
 * creates a new calendar item accordingly.
 */
-function create(e) {
+function create() {
   let sheet = SpreadsheetApp.getActiveSheet();
   let dataRange = sheet.getDataRange().getValues();
   let headers = dataRange.shift();
