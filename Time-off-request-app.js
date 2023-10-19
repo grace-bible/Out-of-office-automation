@@ -214,6 +214,7 @@ function process(row) {
   let email = row[Header.EmailAddress];
   let name = row[Header.FullName];
   let supervisor = row[Header.SuperAddress];
+  let replyall = `${supervisor},hr@grace-bible.org`; 
   let campus = row[Header.Campus];
   let guestEmails = `${OOOcal}`;
   let today = new Date();
@@ -238,10 +239,10 @@ function process(row) {
   let eventDescription = `${superApproval} by ${supervisor}\n`
       + `Submitted on ${month}-${day}-${year}\n\n`
       + `${description}`;
-  let message = `Your ${reason} request was ${hrApproval} for `
-      + `${startDate.toDateString()} to `
-      + `${endDate.toDateString()}\n\n`
-      + `${description}`;
+  let message = `${name} has requested supervisor-approved ${reason} out-of-office (OOO) from ${startDate.toDateString()} until ${endDate.toDateString()}\n\n`
+      + `Reason: ${reason}\n\n`
+      + `${description}`
+      + `To discuss this request, "Reply All" to include Human Resources, the Supervisor, and the Employee on the thread.`;
 
   // /* Check if the user has a calendar. */
   // const calendar = CalendarApp.getCalendarById(email);
@@ -257,8 +258,8 @@ function process(row) {
   /* Confirm that the supervisor approved. */
   if (superApproval == SupervisorApproval.NotApproved) {
     // If not approved, send an email.
-    let subject = 'Your vacation time request failed, contact Josh McKenna';
-    MailApp.sendEmail(email, subject, message);
+    let subject = `[OOO] Your vacation time request failed, contact Josh McKenna`;
+    MailApp.sendEmail(email, subject, message, {name: 'Out of office (OOO) automation', cc: replyall, bcc: 'joshmckenna@grace-bible.org'});
     row[Header.EventCreated] = EventCreated.Created;
 
     Logger.log(`Not approved, email sent, row=${JSON.stringify(row)}`);
@@ -277,9 +278,9 @@ function process(row) {
               sendInvites: true,
             });
   
-      // // Send a confirmation email.
-      // let subject = 'Confirmed, your vacation time request has been approved!';
-      // MailApp.sendEmail(email, subject, message, {cc: supervisor});
+      // Send a confirmation email.
+      let subject = `[OOO] New request for ${name} starting on ${startDate.toDateString()}`;
+      MailApp.sendEmail(email, subject, message, {name: 'Out of office (OOO) automation', cc: replyall});
   
       row[Header.EventCreated] = EventCreated.Created;
   
