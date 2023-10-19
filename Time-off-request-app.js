@@ -217,6 +217,9 @@ function process(row) {
   let campus = row[Header.Campus];
   let guestEmails = `${OOOcal}`;
   let today = new Date();
+    let day = today.getDate();
+    let month = today.getMonth() + 1;
+    let year = today.getFullYear();
   let startDate = row[Header.StartDate];
     // Create a new variable to store the incremented date.
     let incrementStartDate = new Date(startDate);
@@ -232,7 +235,7 @@ function process(row) {
   let superApproval = (row[Header.SupervisorApproval]);
   let hrApproval = (row[Header.HRApproval]);
   let eventName = `${name} - ${reason}`;
-  let eventDescription = `${superApproval} by ${supervisor} on ${today}\n\n`
+  let eventDescription = `${superApproval} by ${supervisor} on ${month}-${day}-${year}\n\n`
       + `${description}`;
   let message = `Your ${reason} request was ${hrApproval} for `
       + `${startDate.toDateString()} to `
