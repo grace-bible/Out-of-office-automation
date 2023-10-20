@@ -119,10 +119,8 @@ function formSetup() {
       .setCollectEmail(true)
       .setDestination(FormApp.DestinationType.SPREADSHEET, sheet.getId())
       .setLimitOneResponsePerUser(false);
-  
-  let validation = FormApp.createTextValidation().setHelpText(`Please use Title Case and proper punctuation for your name.`).requireTextContainsPattern(`^([A-Z]{1}[a-z0-9\- ']{1,}\.?\s?)+[A-Z]{1}[a-z0-9\- ']{1,}$`)
 
-  form.addTextItem().setTitle(Header.FullName).setValidation(validation).setRequired(true);
+  form.addTextItem().setTitle(Header.FullName).setRequired(true);
   form.addListItem().setTitle(Header.Campus).setChoiceValues(Object.values(Campus)).setRequired(false);
   form.addDateItem().setTitle(Header.StartDate).setRequired(true);
   form.addDateItem().setTitle(Header.EndDate).setRequired(true);
