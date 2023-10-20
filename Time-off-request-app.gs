@@ -84,7 +84,7 @@ function onOpen() {
  */
 function createTimeDrivenTriggers() {
   // Trigger every 4 hours.
-  ScriptApp.newTrigger(create)
+  ScriptApp.newTrigger('create')
       .timeBased()
       .everyHours(4)
       .create();
