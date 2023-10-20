@@ -79,6 +79,24 @@ function onOpen() {
 }
 
 /**
+ * Creates two time-driven triggers.
+ * @see https://developers.google.com/apps-script/guides/triggers/installable#time-driven_triggers
+ */
+function createTimeDrivenTriggers() {
+  // Trigger every 4 hours.
+  ScriptApp.newTrigger(create)
+      .timeBased()
+      .everyHours(4)
+      .create();
+  // Trigger every Monday at 09:00.
+  // ScriptApp.newTrigger('myFunction')
+  //     .timeBased()
+  //     .onWeekDay(ScriptApp.WeekDay.MONDAY)
+  //     .atHour(7)
+  //     .create();
+}
+
+/**
    * Set up the "Request time off" form, and link the form's trigger to 
    * optionally send an email to an additional address (like a manager).
    */
