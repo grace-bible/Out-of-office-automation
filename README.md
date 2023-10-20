@@ -2,38 +2,75 @@
 
 This is a time-off request application built for Google Sheets. It allows employees to submit vacation requests through a form and provides functionality for managing and approving those requests. The app utilizes Google Sheets, Google Forms, CalendarApp, and MailApp services in Google Apps Script.
 
-## Setup
+1. **Form setup**: Creates an intake form that you can share with users to submit time off requests. Their responses will be automatically added to the sheet.
+2. **Column setup**: Creates the columns needed to manage approvals in the sheet.
+3. **Create**: Creates a calendar reservation request on the specified out-of-office (OOO) calendar, and sends email notifications to both staff and HR with each created calendar request.
 
-1. Open your Google Sheets document.
+<kbd></kbd>
+
+## Customization
+
+The expected workflow is that employees request time off by submitting calendar invites to a shared "Out of office" calendar managed by HR, rather than a spreadsheet-based approval process. 
+
+Prior to running the "Form setup" and "Column setup" functions of the [Time-off-request-app.gs](Time-off-request-app.gs) script, you can customize certain elements for your own operating environment in the global constant declarations preceding the various functions. This script is configured to receive an employee's email address, and to use the form submitted email to dynamically `getCalendarByID(email)`.
+
+1. Customize the header and approval options:<br>
+   Modify the `Header` and `Reason` and `Campus` and `SupervisorApproval` and `HRApproval` objects to match your desired header names and reasons for requesting time off. You can change the field names and values according to your requirements.
 2. Set your calendar ID:<br>
-   Replace ```CalendarApp.getCalendarById("")``` with the desired calendar ID in the ```process``` function. This ID specifies the calendar where approved time-off events will be added. For example, ``` CalendarApp.getCalendarById("your-calendar-id")```
-3. Customize the header and approval options:<br>
-   Modify the ```Header``` and ```Approval``` objects to match your desired header names and approval options. You can change the field names and values according to your requirements.
+   Replace the `OOOcal` constant with the desired calendar ID. This ID specifies the calendar where approved time-off events will be added.
 4. Enable necessary services:<br>
    From the Google Sheets menu, go to "Extensions" > "Apps Script" to open the Apps Script editor. If prompted, click on "Enable" to enable Google Apps Script.
-5. Set up the form:<br>
-   In the Apps Script editor, run the ```formSetup```function. This will create a form titled "Request time off" and link it to your Google Sheets document. The form will have fields for name, start date, end date, and     
-   approval status.
+
+## How to use
+
+1. Create a new Google Sheet.
+2. Click "Extensions" > "Apps Script".
+3. Copy the contents of [Time-off-request-app.gs](Time-off-request-app.gs) and paste it over the boilerplate `Code.gs` in the Apps Script Editor
+4. Re-open the Google Sheet you created and wait for a few seconds for a custom menu called "Approval functions" to appear at the top of the sheet.
+5. Click "Approval functions" > "Form setup", then wait for the dialog to indicate completion of the script.
+6. Next, use the "Column setup" function to create columns for tracking the status of requests.
+7. Click "Tools" > "Manage form" > "Send form" to open the form sharing dialogue to share it with users who need to submit time off requests. As users submit requests, they will be automatically added to the sheet.
+
+> [!NOTE]
+> The current version of this script only runs by default when triggered manually by clicking "Approval functions" > "Create calendar events". A time-based trigger can be added from the Apps Script Triggers editor by triggering the `create()` function.
+
+### Benefits
+
+- This app is a simple and easy way to manage vacation requests.
+- It is free to use.
+- It is customizable to meet the specific needs of your organization.
+- It can be used to track the status of requests.
+- It can be used to send email notifications to users.
+
+### Limitations
+
+- This app is not a comprehensive vacation management system.
+- It does not support features such as accrual tracking or blackout dates.
+- It is not designed to be used by a large number of users.
+
+## Conclusion
+
+This Apps Script project is a simple and effective way to manage vacation requests. It is a good option for *small* organizations that are looking for a free and easy-to-use solution.
+
 
 ## Usage
 
 1. Submitting time-off requests:<br>
-  Employees can access the form by clicking on "Form" > "Go to live form" from the Google Sheets menu. They can then fill out the form with their name, start date, and end date. Once submitted, the request will be added to     the Google Sheets document.
+  Employees can access the form by clicking on "Form" > "Go to live form" from the Google Sheets menu. They can then fill out the form with their name, start date, and end date. Once submitted, the request will be added to the Google Sheets document.
 2. Approving or rejecting requests:<br>
-  From the Google Sheets menu, click on "🏝 Vacation" > "Notify employees" to process the time-off requests. Based on the approval status, the corresponding actions will be taken:<br>
-      * If the request is not approved, an email will be sent to the employee notifying them of the rejection.
-      * If the request is approved, a calendar event will be created for the requested time-off, and a confirmation email will be sent to the employee.
+  From the Google Sheets menu, click on "Approval functions" > "Create calendar events" to process the time-off requests and place them on the specificed `OOOcal`. Based on the success, the corresponding actions will be taken:<br>
+      * If the calendar event has not been created or fails, an email will be sent to the employee notifying them of the rejection.
+      * If the calendar event is created a calendar event will be created for the requested time-off, and a confirmation email will be sent to the employee.
 
 ## Notes
 
-* Make sure to set the necessary calendar IDs in the process function and formSetup function.
-* The app assumes that the Google Sheets document has the required headers as specified in the ```Header``` object.
+* The app assumes that the Google Sheets document has the required headers as specified in the `Header` object.
 * The app uses the MailApp service to send emails. Ensure that the email sending capabilities are enabled in your Google Workspace account.
-* Customize the email content and subject in the ```process``` function according to your needs.
-* Use the ```onOpen``` function to add a custom menu option to your Google Sheets document for easy access to the app.
+* Customize the email content and subject in the `process(row)` function according to your needs.
+* Use the `onOpen` function to add a custom menu option to your Google Sheets document for easy access to the app.
 
 ## Disclaimer
 
 This application was created to demonstrate the basic functionality of a time-off request system using Google Sheets, Google Forms, and Google Apps Script. It is recommended to review and modify the code as per your specific requirements and ensure compliance with your organization's policies and guidelines.
 
-For more information and support, please refer to the Google Apps Script documentation and the Google Sheets Help Center.
+For more information and support, please refer to the [Google Apps Script documentation](https://developers.google.com/apps-script/reference) and the Google Sheets Help Center.
