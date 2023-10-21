@@ -15,8 +15,8 @@
 
 const Header = {
   Timestamp: 'Timestamp',
-  FullName: 'Name',
   EmailAddress: 'Email Address',
+  FullName: 'Name',
   Campus: 'Campus',
   StartDate: 'Start date',
   EndDate: 'End date',
@@ -74,7 +74,7 @@ function onOpen() {
       .createMenu('Approval functions')
       .addItem('Form setup', 'formSetup')
       .addItem('Column setup', 'columnSetup')
-      .addItem('Create calendar events', 'create')
+      .addItem('Create calendar events', 'eventSetup')
       .addToUi();
 }
 
@@ -84,12 +84,12 @@ function onOpen() {
  */
 function createTimeDrivenTriggers() {
   // Trigger every 4 hours.
-  ScriptApp.newTrigger('create')
+  ScriptApp.newTrigger('eventSetup')
       .timeBased()
-      .everyHours(4)
+      .everyHours(1)
       .create();
   // Trigger every Monday at 09:00.
-  // ScriptApp.newTrigger('myFunction')
+  // ScriptApp.newTrigger('eventSetup')
   //     .timeBased()
   //     .onWeekDay(ScriptApp.WeekDay.MONDAY)
   //     .atHour(7)
@@ -176,7 +176,7 @@ function appendColumn(sheet, headerName, maybeChoices) {
 * Checks the creation status of each entry and, if not created,
 * creates a new calendar item accordingly.
 */
-function create() {
+function eventSetup() {
   let sheet = SpreadsheetApp.getActiveSheet();
   let dataRange = sheet.getDataRange().getValues();
   let headers = dataRange.shift();
