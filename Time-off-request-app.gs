@@ -51,6 +51,8 @@ const Campus = {
 
 const OOOcal = 'grace-bible.org_323330343338383235@resource.calendar.google.com'
 
+const OOOemail = 'hr@grace-bible.org'
+
 const SupervisorApproval = {
   Approved: 'Approved',
   NotApproved: 'Not approved',
@@ -230,9 +232,9 @@ function process(row) {
   let email = row[Header.EmailAddress];
   let name = row[Header.FullName];
   let supervisor = row[Header.SuperAddress];
-  let replyall = `${supervisor}, hr@grace-bible.org`;
+  let replyall = `${supervisor}, ${OOOemail}`;
   let campus = row[Header.Campus];
-  let guestEmails = `${OOOcal}`;
+  let guestEmails = `${OOOcal}, ${email}`;
   let today = new Date();
     let day = today.getDate();
     let month = today.getMonth() + 1;
@@ -283,7 +285,7 @@ function process(row) {
 
   else if (superApproval == SupervisorApproval.Approved) {
     // If approved, create a calendar event.
-    CalendarApp.getCalendarById(email)
+    CalendarApp.getCalendarById('ooo@grace-bible.org')
         .createAllDayEvent(
             eventName,
             incrementStartDate,
@@ -292,7 +294,8 @@ function process(row) {
               description: eventDescription,
               guests: guestEmails,
               sendInvites: true,
-            });
+            })
+        .setGuestsCanModify(true);
   
       // Send a confirmation email.
       let subject = `[OOO] New request for ${name} starting on ${startDate.toDateString()}`;
