@@ -12,6 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * Several constants are defined using JavaScript objects to store 
+ * header names, reasons for time off, campus locations, email addresses, 
+ * and various approval statuses. These constants are used 
+ * throughout the script.
+ */
 
 const Header = {
   Timestamp: 'Timestamp',
@@ -69,7 +75,10 @@ const EventCreated = {
 };
 
 /**
-* Add custom menu items when opening the sheet.
+* This function sets up custom menu items that appear when the Google Sheet is
+* opened. The menu includes options for "Form setup," "Column setup," and 
+* "Create calendar events." These menu items allow users to trigger specific 
+* functions.
 */
 function onOpen() {
   SpreadsheetApp.getUi()
@@ -81,7 +90,11 @@ function onOpen() {
 }
 
 /**
- * Creates two time-driven triggers.
+ * This function is responsible for creating time-driven triggers. 
+ * It uses `ScriptApp.newTrigger` to set up triggers that can execute functions
+ * at specified times. In the code, there are two examples, one for triggering 
+ * the `eventSetup` function every hour and another for triggering it every 
+ * Monday.
  * @see https://developers.google.com/apps-script/guides/triggers/installable#time-driven_triggers
  */
 function createTimeDrivenTriggers() {
@@ -99,8 +112,10 @@ function createTimeDrivenTriggers() {
 }
 
 /**
-   * Set up the "Request time off" form, and link the form's trigger to 
-   * optionally send an email to an additional address (like a manager).
+   * This function sets up a Google Form for requesting time off. It creates 
+   * form items such as text inputs, date pickers, and checkboxes. The form is 
+   * linked to the Google Sheet to capture responses. If a form already exists,
+   * it displays a message to unlink the existing form.
    */
 function formSetup() {
   let sheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -141,7 +156,10 @@ function formSetup() {
 }
 
 /**
- * Creates an "HR Approved" and "Calendar event status" column
+ * This function adds columns to the active Google Sheet. It uses the 
+ * `appendColumn` function to add columns for "HR Approval" and "Calendar 
+ * event status." Optional choices for these columns can be defined for data 
+ * validation.
  */
 function columnSetup() {
   let sheet = SpreadsheetApp.getActiveSheet();
@@ -151,7 +169,7 @@ function columnSetup() {
 }
 
 /**
- * Appends a new column.
+ * Appends a new column. It allows for optional choices to be defined for data validation if provided.
  * 
  *  @param {SpreadsheetApp.Sheet} sheet - tab in sheet.
  *  @param {string} headerName - name of column.
@@ -175,8 +193,9 @@ function appendColumn(sheet, headerName, maybeChoices) {
 }
 
 /**
-* Checks the creation status of each entry and, if not created,
-* creates a new calendar item accordingly.
+* This function checks the creation status of each entry in the Google Sheet 
+* and, if a calendar event has not been created, it triggers the process 
+* function gets the data range, validate headers, and process rows accordingly.
 */
 function eventSetup() {
   let sheet = SpreadsheetApp.getActiveSheet();
@@ -193,7 +212,8 @@ function eventSetup() {
 }
 
 /**
-* Validate that the sheet headers match a schema.
+* This function validates that the sheet headers match a predefined schema. 
+* If a header is missing, it throws an error.
 */
 function validateSheetHeaders(headers, schema) {
   for (let header of Object.values(schema)) {
@@ -204,9 +224,8 @@ function validateSheetHeaders(headers, schema) {
 }
 
 /**
-* Convert the row arrays into objects.
-* Start with an empty object, then create a new field
-* for each header name using the corresponding row value.
+* This function converts rows (represented as arrays) into objects with named 
+* properties. It uses the headers as keys to create objects from row data.
 * 
 * @param {string[]} headers - list of column names.
 * @param {any[]} rowArray - values of a row as an array.
@@ -221,9 +240,9 @@ function asObject(headers, rowArray, rowIndex) {
 }
 
 /**
-* Checks if a row is marked as "approved". If approved a calendar
-* event is created for the user. If not approved, an email
-* notification is sent.
+* This function processes each row to check if it's "approved." If approved, 
+* it creates a calendar event using the CalendarApp service and sends 
+* confirmation emails. If not approved, it sends an email notification.
 * 
 * @param {Object} row - values in a row.
 * @returns {Object} the row with a "notified status" column populated.
@@ -316,7 +335,9 @@ function process(row) {
 }
 
 /**
-* Rewrites a row into the sheet.
+* This function rewrites a row into the Google Sheet. It takes a sheet, 
+* headers, and a row object as input and sets the values in the 
+* appropriate rows and columns.
 * 
 * @param {SpreadsheetApp.Sheet} sheet - tab in sheet.
 * @param {string[]} headers - list of column names.
