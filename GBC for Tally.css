@@ -1,0 +1,115 @@
+@font-face {
+  font-family: "texgyreadventor";
+  src: url("https://github.com/robfletcher/font-taxonomy/blob/master/app/fonts/TeX-Gyre-Adventor/texgyreadventor-regular-webfont.eot");
+  src: url("https://github.com/robfletcher/font-taxonomy/blob/master/app/fonts/TeX-Gyre-Adventor/texgyreadventor-regular-webfont.woff");
+  src: url("https://github.com/robfletcher/font-taxonomy/blob/master/app/fonts/TeX-Gyre-Adventor/texgyreadventor-regular-webfont.ttf");
+  font-weight: 600;
+  letter-spacing: 2px;
+  font-style: bold;
+  font-display: swap;
+}
+
+.tally-block-form-title {
+  font-family: "bebas neue", sans-serif;
+  font-size: 65px;
+}
+
+.tally-block-heading-1 {
+  font-family: "texgyreadventor", sans-serif;
+  text-transform: uppercase;
+  font-size: 36px;
+}
+
+.tally-block-heading-2 {
+  font-family: "texgyreadventor", sans-serif;
+  text-transform: uppercase;
+  font-size: 28px;
+}
+
+.tally-block-heading-3 {
+  font-family: "texgyreadventor", sans-serif;
+  text-transform: uppercase;
+  font-size: 22px;
+}
+
+.tally-block-label {
+  font-family: "texgyreadventor", sans-serif;
+  text-transform: uppercase;
+  font-size: 16px;
+}
+
+.tally-block-text {
+  font-family: "lato", sans-serif;
+  font-size: 16px;
+}
+
+.tally-submit-button button {
+  background: transparent;
+  display: inline-block;
+  color: #333;
+  border: 2px solid #333;
+  font-family: "texgyreadventor", sans-serif;
+  text-transform: uppercase;
+  text-align: center;
+  border-radius: 50px;
+  padding: 6px 40px;
+  transition: all 300ms ease-out;
+  margin: 0 auto;
+}
+
+.tally-submit-button button:hover {
+  border-color: #901a1c;
+  background-color: #901a1c;
+  color: #fff !important;
+}
+
+.tally-multiple-choice-option-selected > div {
+  box-shadow: #901a1c 0px 0px 0px 2px !important;
+}
+
+.tally-multiple-choice-option-selected > div:focus-within {
+  box-shadow: #901a1c 0px 0px 0px 2px !important;
+}
+
+.tally-multiple-choice-option-selected > div > div > div {
+  background-color: #901a1c;
+  border: #901a1c;
+}
+
+.tally-checkbox-selected > div > div > div {
+  background-color: #901a1c !important;
+  box-shadow: #901a1c 0px 0px 0px 2px !important;
+  border: #901a1c !important;
+}
+
+.tally-checkbox-selected > div > div > div:focus-within {
+  background-color: #901a1c !important;
+  box-shadow: #901a1c 0px 0px 0px 2px !important;
+  border: #901a1c !important;
+}
+
+.tally-block-dropdown input:focus {
+  box-shadow: #901a1c 0px 0px 0px 2px;
+}
+
+.tally-linear-scale-option-selected {
+  color: #901a1c !important;
+  box-shadow: #901a1c 0px 0px 0px 2px !important;
+  border: #901a1c !important;
+}
+
+.tally-block-linear-scale .tally-linear-scale-option-selected:focus-within {
+  color: #901a1c !important;
+  box-shadow: #901a1c 0px 0px 0px 2px !important;
+  border: #901a1c !important;
+}
+
+.tally-block input:focus,
+.tally-block textarea:focus {
+  box-shadow: #901a1c 0px 0px 0px 2px !important;
+}
+
+.tally-ranking-option-ranked > div > div > div {
+  background-color: #901a1c !important;
+  border: #901a1c !important;
+}
