@@ -187,7 +187,12 @@ function eventSetup() {
 
   let rows = dataRange
     .map((row, i) => asObject(headers, row, i))
-    .filter((row) => row[Header.EventCreated] != EventCreated.Created)
+    .filter(
+      (row) =>
+        row[Header.EventCreated] != EventCreated.Created &&
+        row[Header.EventCreated] != EventCreated.Canceled &&
+        row[Header.HRApproval] != HRApproval.NotApproved
+    )
     .map(process)
     .map((row) => writeRowToSheet(sheet, headers, row));
 }
