@@ -66,6 +66,7 @@ const HRApproval = {
 const EventCreated = {
   NotCreated: "Event not created",
   Created: "Event created",
+  Canceled: "Request canceled",
 };
 
 /**
