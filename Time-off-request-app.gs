@@ -337,18 +337,26 @@ function process(row) {
     MailApp.sendEmail(
       email,
       subject,
-      "Please contact HR and copy joshmckenna@grace-bible.org for help",
+      "Please check the dates you entered and resubmit your request with a valid start date that precedes the end date.",
       {
-        name: "Out of office (OOO) automation",
+        name: "Out of office (OOO) automation ERROR",
         cc: replyall,
-        bcc: "joshmckenna@grace-bible.org",
+        // bcc: "joshmckenna+error@grace-bible.org",
       }
     );
-    row[Header.EventCreated] = EventCreated.NotCreated;
+    row[Header.EventCreated] = EventCreated.Canceled;
 
-    Logger.log(`Failed, email sent, row=${JSON.stringify(row)}`);
+    Logger.log(
+      `ERROR: Requested dates invalid, email sent, row=${JSON.stringify(row)}`
+    );
+    UiApp.alert(
+      `ERROR: ${name} has requested to time travel without a proper permit. See row row=${JSON.stringify(
+        row
+      )} for the canceled request. ${email} was notified to resubmit the request with valid dates.`
+    );
   } else if (
     superApproval == SupervisorApproval.Approved &&
+    hrApproval != HRApproval.NotApproved &&
     incrementEndDate.getTime() > incrementStartDate.getTime()
   ) {
     // If approved, create a calendar event.
@@ -369,19 +377,26 @@ function process(row) {
 
     row[Header.EventCreated] = EventCreated.Created;
 
-    Logger.log(`Approved calendar event created, row=${JSON.stringify(row)}`);
-  } else {
-    // If failed, send an email.
-    let subject = `[OOO] Request FAILED - notified Josh McKenna`;
-    MailApp.sendEmail(
-      "joshmckenna@grace-bible.org",
-      subject,
-      "Please contact HR and copy joshmckenna@grace-bible.org for help",
-      { name: "Out of office (OOO) automation", cc: email, bcc: replyall }
+    Logger.log(
+      `Approved calendar event for ${name} created, row=${JSON.stringify(row)}`
     );
-    row[Header.EventCreated] = EventCreated.NotCreated;
+  } else {
+    // For any other error, send an email and cancel the request.
+    let subject = `[OOO] ERROR: Unexpected error occurred`;
+    MailApp.sendEmail(
+      "joshmckenna+error@grace-bible.org",
+      subject,
+      "Please contact joshmckenna+error@grace-bible.org for more details. Please pay close attention to your typing and submitted details when you resubmit your request.",
+      { name: "Out of office (OOO) automation ERROR", cc: email, bcc: replyall }
+    );
+    row[Header.EventCreated] = EventCreated.Canceled;
 
     Logger.log(`No action taken, row=${JSON.stringify(row)}`);
+    UiApp.alert(
+      `ERROR: Unexpexted fatal error at row row=${JSON.stringify(
+        row
+      )} and joshmckenna+error@grace-bible.org has been notified to investigate.`
+    );
   }
 
   return row;
