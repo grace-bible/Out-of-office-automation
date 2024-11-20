@@ -282,17 +282,6 @@ function process(row) {
     `${description}\n\n` +
     `To discuss this request, "Reply All" to include Human Resources, the Supervisor, and the Employee on the thread.`;
 
-  // /* Check if the user has a calendar. */
-  // const calendar = CalendarApp.getCalendarById(email);
-  // if (!calendar) {
-  //     // The user does not have a calendar.
-  //     Logger.log(`User does not have a calendar: ${email}`);
-  //     // Display a message to the user.
-  //     UiApp.alert(`User does not have a calendar. Please contact IT support before using this script.`);
-  //     // Skip creating the calendar event.
-  //     return row;
-  // }
-
   /* Confirm that the supervisor approved. */
   if (superApproval == SupervisorApproval.NotApproved) {
     // If not approved, send an email and cancel the request.
@@ -312,7 +301,7 @@ function process(row) {
     Logger.log(
       `ERROR: Approval denied, email sent, row=${JSON.stringify(row)}`
     );
-    UiApp.alert(
+    SpreadsheetApp.getUi().alert(
       `ERROR: ${name} must secure Superivsor approval before requesting time OOO. See row row=${JSON.stringify(
         row
       )} for the canceled request. ${email} was notified to resubmit the request after securing Supervisor approval.`
@@ -335,7 +324,7 @@ function process(row) {
     Logger.log(
       `ERROR: Approval denied, email sent, row=${JSON.stringify(row)}`
     );
-    UiApp.alert(
+    SpreadsheetApp.getUi().alert(
       `ERROR: HR has denied this request for ${name}. See row row=${JSON.stringify(
         row
       )} for the canceled request. ${email} was notified to contact HR for more information.`
@@ -358,7 +347,7 @@ function process(row) {
     Logger.log(
       `ERROR: Requested dates invalid, email sent, row=${JSON.stringify(row)}`
     );
-    UiApp.alert(
+    SpreadsheetApp.getUi().alert(
       `ERROR: ${name} has requested to time travel without a proper permit. See row row=${JSON.stringify(
         row
       )} for the canceled request. ${email} was notified to resubmit the request with valid dates.`
@@ -401,7 +390,7 @@ function process(row) {
     row[Header.EventCreated] = EventCreated.Canceled;
 
     Logger.log(`No action taken, row=${JSON.stringify(row)}`);
-    UiApp.alert(
+    SpreadsheetApp.getUi().alert(
       `ERROR: Unexpexted fatal error at row row=${JSON.stringify(
         row
       )} and joshmckenna+error@grace-bible.org has been notified to investigate.`
