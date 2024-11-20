@@ -286,17 +286,6 @@ function process(row) {
     `${description}\n\n` +
     `To discuss this request, "Reply All" to include Human Resources, the Supervisor, and the Employee on the thread.`;
 
-  // /* Check if the user has a calendar. */
-  // const calendar = CalendarApp.getCalendarById(email);
-  // if (!calendar) {
-  //     // The user does not have a calendar.
-  //     Logger.log(`User does not have a calendar: ${email}`);
-  //     // Display a message to the user.
-  //     UiApp.alert(`User does not have a calendar. Please contact IT support before using this script.`);
-  //     // Skip creating the calendar event.
-  //     return row;
-  // }
-
   /* Confirm that the supervisor approved. */
   if (superApproval == SupervisorApproval.NotApproved) {
     // If not approved, send an email and cancel the request.
