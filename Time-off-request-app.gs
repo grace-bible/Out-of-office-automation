@@ -305,7 +305,7 @@ function process(row) {
     Logger.log(
       `ERROR: Approval denied, email sent, row=${JSON.stringify(row)}`
     );
-    UiApp.alert(
+    SpreadsheetApp.getUi().alert(
       `ERROR: ${name} must secure Superivsor approval before requesting time OOO. See row row=${JSON.stringify(
         row
       )} for the canceled request. ${email} was notified to resubmit the request after securing Supervisor approval.`
@@ -328,7 +328,7 @@ function process(row) {
     Logger.log(
       `ERROR: Approval denied, email sent, row=${JSON.stringify(row)}`
     );
-    UiApp.alert(
+    SpreadsheetApp.getUi().alert(
       `ERROR: HR has denied this request for ${name}. See row row=${JSON.stringify(
         row
       )} for the canceled request. ${email} was notified to contact HR for more information.`
@@ -351,7 +351,7 @@ function process(row) {
     Logger.log(
       `ERROR: Requested dates invalid, email sent, row=${JSON.stringify(row)}`
     );
-    UiApp.alert(
+    SpreadsheetApp.getUi().alert(
       `ERROR: ${name} has requested to time travel without a proper permit. See row row=${JSON.stringify(
         row
       )} for the canceled request. ${email} was notified to resubmit the request with valid dates.`
@@ -394,7 +394,7 @@ function process(row) {
     row[Header.EventCreated] = EventCreated.Canceled;
 
     Logger.log(`No action taken, row=${JSON.stringify(row)}`);
-    UiApp.alert(
+    SpreadsheetApp.getUi().alert(
       `ERROR: Unexpexted fatal error at row row=${JSON.stringify(
         row
       )} and joshmckenna+error@grace-bible.org has been notified to investigate.`
