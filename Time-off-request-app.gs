@@ -211,6 +211,15 @@ function validateSheetHeaders(headers, schema) {
 }
 
 /**
+ * Validate that supervisor email(s) match a schema.
+ */
+function validateEmails(input) {
+  let regex =
+    /[-A-Za-z0-9!#$%&'*+\/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+\/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?,\s+[-A-Za-z0-9!#$%&'*+\/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+\/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?/i;
+  return regex.test(input);
+}
+
+/**
  * Convert the row arrays into objects.
  * Start with an empty object, then create a new field
  * for each header name using the corresponding row value.
