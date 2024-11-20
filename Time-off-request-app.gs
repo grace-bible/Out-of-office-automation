@@ -285,12 +285,55 @@ function process(row) {
   // }
 
   /* Confirm that the supervisor approved. */
-  if (
-    superApproval == SupervisorApproval.NotApproved ||
-    incrementEndDate.getTime() < incrementStartDate.getTime()
-  ) {
-    // If not approved, send an email.
-    let subject = `[OOO] Request FAILED - contact HR`;
+  if (superApproval == SupervisorApproval.NotApproved) {
+    // If not approved, send an email and cancel the request.
+    let subject = `[OOO] Request ERROR: Supervisor approval required`;
+    MailApp.sendEmail(
+      email,
+      subject,
+      "Please secure your supervisor's approval before resubmitting your request.",
+      {
+        name: "Out of office (OOO) automation ERROR",
+        cc: replyall,
+        // bcc: "joshmckenna+error@grace-bible.org",
+      }
+    );
+    row[Header.EventCreated] = EventCreated.Canceled;
+
+    Logger.log(
+      `ERROR: Approval denied, email sent, row=${JSON.stringify(row)}`
+    );
+    UiApp.alert(
+      `ERROR: ${name} must secure Superivsor approval before requesting time OOO. See row row=${JSON.stringify(
+        row
+      )} for the canceled request. ${email} was notified to resubmit the request after securing Supervisor approval.`
+    );
+  } else if (HRApproval == HRApproval.NotApproved) {
+    // If not denied, send an email and cancel the request.
+    let subject = `[OOO] Request ERROR: HR denied your request`;
+    MailApp.sendEmail(
+      email,
+      subject,
+      "Please contact HR immediately for more details. Do NOT resubmit your request without contacting HR.",
+      {
+        name: "Out of office (OOO) automation ERROR",
+        cc: replyall,
+        // bcc: "joshmckenna+error@grace-bible.org",
+      }
+    );
+    row[Header.EventCreated] = EventCreated.Canceled;
+
+    Logger.log(
+      `ERROR: Approval denied, email sent, row=${JSON.stringify(row)}`
+    );
+    UiApp.alert(
+      `ERROR: HR has denied this request for ${name}. See row row=${JSON.stringify(
+        row
+      )} for the canceled request. ${email} was notified to contact HR for more information.`
+    );
+  } else if (incrementEndDate.getTime() < incrementStartDate.getTime()) {
+    // If startDate after endDate, send an email and cancel the request.
+    let subject = `[OOO] Request ERROR: Only God transcends time`;
     MailApp.sendEmail(
       email,
       subject,
