@@ -13,8 +13,10 @@
 // limitations under the License.
 
 const Header = {
-  Timestamp: "Timestamp",
-  EmailAddress: "Email Address",
+  Submission: "Submission ID",
+  Respondent: "Respondent ID",
+  Timestamp: "Submitted at",
+  EmailAddress: "Email",
   FullName: "Name",
   Campus: "Campus",
   StartDate: "Start date",
@@ -22,7 +24,9 @@ const Header = {
   Reason: "Reason",
   Description: "Brief description",
   SuperAddress: "Supervisor email",
-  SupervisorApproval: "My supervisor has already approved this request",
+  LongFormSupervisorApproval: "Supervisor approved",
+  SupervisorApproval:
+    "Supervisor approved (My supervisor has already approved this request)",
   HRApproval: "HR approval",
   EventCreated: "Calendar event status",
 };
@@ -54,8 +58,8 @@ const OOOcal =
 const OOOemail = "janineford@grace-bible.org, madelineechols@grace-bible.org";
 
 const SupervisorApproval = {
-  Approved: "Approved",
-  NotApproved: "Not approved",
+  Approved: "TRUE",
+  NotApproved: "FALSE",
 };
 
 const HRApproval = {
