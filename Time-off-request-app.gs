@@ -66,6 +66,7 @@ const HRApproval = {
 const EventCreated = {
   NotCreated: "Event not created",
   Created: "Event created",
+  Canceled: "Request canceled",
 };
 
 /**
@@ -186,7 +187,12 @@ function eventSetup() {
 
   let rows = dataRange
     .map((row, i) => asObject(headers, row, i))
-    .filter((row) => row[Header.EventCreated] != EventCreated.Created)
+    .filter(
+      (row) =>
+        row[Header.EventCreated] != EventCreated.Created &&
+        row[Header.EventCreated] != EventCreated.Canceled &&
+        row[Header.HRApproval] != HRApproval.NotApproved
+    )
     .map(process)
     .map((row) => writeRowToSheet(sheet, headers, row));
 }
@@ -202,6 +208,15 @@ function validateSheetHeaders(headers, schema) {
       )}`;
     }
   }
+}
+
+/**
+ * Validate that supervisor email(s) match a schema.
+ */
+function validateEmails(input) {
+  let regex =
+    /[-A-Za-z0-9!#$%&'*+\/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+\/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?,\s+[-A-Za-z0-9!#$%&'*+\/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+\/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?/i;
+  return regex.test(input);
 }
 
 /**
@@ -267,39 +282,79 @@ function process(row) {
     `${description}\n\n` +
     `To discuss this request, "Reply All" to include Human Resources, the Supervisor, and the Employee on the thread.`;
 
-  // /* Check if the user has a calendar. */
-  // const calendar = CalendarApp.getCalendarById(email);
-  // if (!calendar) {
-  //     // The user does not have a calendar.
-  //     Logger.log(`User does not have a calendar: ${email}`);
-  //     // Display a message to the user.
-  //     UiApp.alert(`User does not have a calendar. Please contact IT support before using this script.`);
-  //     // Skip creating the calendar event.
-  //     return row;
-  // }
-
   /* Confirm that the supervisor approved. */
-  if (
-    superApproval == SupervisorApproval.NotApproved ||
-    incrementEndDate.getTime() < incrementStartDate.getTime()
-  ) {
-    // If not approved, send an email.
-    let subject = `[OOO] Request FAILED - contact HR`;
+  if (superApproval == SupervisorApproval.NotApproved) {
+    // If not approved, send an email and cancel the request.
+    let subject = `[OOO] Request ERROR: Supervisor approval required`;
     MailApp.sendEmail(
       email,
       subject,
-      "Please contact HR and copy joshmckenna@grace-bible.org for help",
+      "Please secure your supervisor's approval before resubmitting your request.",
       {
-        name: "Out of office (OOO) automation",
+        name: "Out of office (OOO) automation ERROR",
         cc: replyall,
-        bcc: "joshmckenna@grace-bible.org",
+        // bcc: "joshmckenna+error@grace-bible.org",
       }
     );
-    row[Header.EventCreated] = EventCreated.NotCreated;
+    row[Header.EventCreated] = EventCreated.Canceled;
 
-    Logger.log(`Failed, email sent, row=${JSON.stringify(row)}`);
+    Logger.log(
+      `ERROR: Approval denied, email sent, row=${JSON.stringify(row)}`
+    );
+    SpreadsheetApp.getUi().alert(
+      `ERROR: ${name} must secure Superivsor approval before requesting time OOO. See row row=${JSON.stringify(
+        row
+      )} for the canceled request. ${email} was notified to resubmit the request after securing Supervisor approval.`
+    );
+  } else if (HRApproval == HRApproval.NotApproved) {
+    // If not denied, send an email and cancel the request.
+    let subject = `[OOO] Request ERROR: HR denied your request`;
+    MailApp.sendEmail(
+      email,
+      subject,
+      "Please contact HR immediately for more details. Do NOT resubmit your request without contacting HR.",
+      {
+        name: "Out of office (OOO) automation ERROR",
+        cc: replyall,
+        // bcc: "joshmckenna+error@grace-bible.org",
+      }
+    );
+    row[Header.EventCreated] = EventCreated.Canceled;
+
+    Logger.log(
+      `ERROR: Approval denied, email sent, row=${JSON.stringify(row)}`
+    );
+    SpreadsheetApp.getUi().alert(
+      `ERROR: HR has denied this request for ${name}. See row row=${JSON.stringify(
+        row
+      )} for the canceled request. ${email} was notified to contact HR for more information.`
+    );
+  } else if (incrementEndDate.getTime() < incrementStartDate.getTime()) {
+    // If startDate after endDate, send an email and cancel the request.
+    let subject = `[OOO] Request ERROR: Only God transcends time`;
+    MailApp.sendEmail(
+      email,
+      subject,
+      "Please check the dates you entered and resubmit your request with a valid start date that precedes the end date.",
+      {
+        name: "Out of office (OOO) automation ERROR",
+        cc: replyall,
+        // bcc: "joshmckenna+error@grace-bible.org",
+      }
+    );
+    row[Header.EventCreated] = EventCreated.Canceled;
+
+    Logger.log(
+      `ERROR: Requested dates invalid, email sent, row=${JSON.stringify(row)}`
+    );
+    SpreadsheetApp.getUi().alert(
+      `ERROR: ${name} has requested to time travel without a proper permit. See row row=${JSON.stringify(
+        row
+      )} for the canceled request. ${email} was notified to resubmit the request with valid dates.`
+    );
   } else if (
     superApproval == SupervisorApproval.Approved &&
+    hrApproval != HRApproval.NotApproved &&
     incrementEndDate.getTime() > incrementStartDate.getTime()
   ) {
     // If approved, create a calendar event.
@@ -320,19 +375,26 @@ function process(row) {
 
     row[Header.EventCreated] = EventCreated.Created;
 
-    Logger.log(`Approved calendar event created, row=${JSON.stringify(row)}`);
-  } else {
-    // If failed, send an email.
-    let subject = `[OOO] Request FAILED - notified Josh McKenna`;
-    MailApp.sendEmail(
-      "joshmckenna@grace-bible.org",
-      subject,
-      "Please contact HR and copy joshmckenna@grace-bible.org for help",
-      { name: "Out of office (OOO) automation", cc: email, bcc: replyall }
+    Logger.log(
+      `Approved calendar event for ${name} created, row=${JSON.stringify(row)}`
     );
-    row[Header.EventCreated] = EventCreated.NotCreated;
+  } else {
+    // For any other error, send an email and cancel the request.
+    let subject = `[OOO] ERROR: Unexpected error occurred`;
+    MailApp.sendEmail(
+      "joshmckenna+error@grace-bible.org",
+      subject,
+      "Please contact joshmckenna+error@grace-bible.org for more details. Please pay close attention to your typing and submitted details when you resubmit your request.",
+      { name: "Out of office (OOO) automation ERROR", cc: email, bcc: replyall }
+    );
+    row[Header.EventCreated] = EventCreated.Canceled;
 
     Logger.log(`No action taken, row=${JSON.stringify(row)}`);
+    SpreadsheetApp.getUi().alert(
+      `ERROR: Unexpexted fatal error at row row=${JSON.stringify(
+        row
+      )} and joshmckenna+error@grace-bible.org has been notified to investigate.`
+    );
   }
 
   return row;
