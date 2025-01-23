@@ -63,26 +63,26 @@
   color: #fff !important;
 }
 
-.tally-multiple-choice-option-selected > div {
+.tally-multiple-choice-option-selected>div {
   box-shadow: #901a1c 0px 0px 0px 2px !important;
 }
 
-.tally-multiple-choice-option-selected > div:focus-within {
+.tally-multiple-choice-option-selected>div:focus-within {
   box-shadow: #901a1c 0px 0px 0px 2px !important;
 }
 
-.tally-multiple-choice-option-selected > div > div > div {
+.tally-multiple-choice-option-selected>div>div>div {
   background-color: #901a1c;
   border: #901a1c;
 }
 
-.tally-checkbox-selected > div > div > div {
+.tally-checkbox-selected>div>div>div {
   background-color: #901a1c !important;
   box-shadow: #901a1c 0px 0px 0px 2px !important;
   border: #901a1c !important;
 }
 
-.tally-checkbox-selected > div > div > div:focus-within {
+.tally-checkbox-selected>div>div>div:focus-within {
   background-color: #901a1c !important;
   box-shadow: #901a1c 0px 0px 0px 2px !important;
   border: #901a1c !important;
@@ -109,7 +109,7 @@
   box-shadow: #901a1c 0px 0px 0px 2px !important;
 }
 
-.tally-ranking-option-ranked > div > div > div {
+.tally-ranking-option-ranked>div>div>div {
   background-color: #901a1c !important;
   border: #901a1c !important;
 }
