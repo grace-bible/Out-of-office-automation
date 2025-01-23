@@ -27,6 +27,7 @@ const Header = {
   SupervisorApproval: "My supervisor has already approved this request",
   HRApproval: "HR approval",
   EventCreated: "Calendar event status",
+  LogErrors: "Errors",
 };
 
 const Reason = {
@@ -273,6 +274,7 @@ function process(row) {
   let description = row[Header.Description];
   let superApproval = row[Header.SupervisorApproval];
   let hrApproval = row[Header.HRApproval];
+  let sheetURL = SpreadsheetApp.getActiveSpreadsheet().getUrl();
   let eventName = `${name} - ${reason}`;
   let eventDescription =
     `${superApproval} by ${supervisor}\n` +
@@ -287,7 +289,7 @@ function process(row) {
   /* Confirm that the supervisor approved. */
   if (superApproval == SupervisorApproval.NotApproved) {
     // If not approved, send an error email and cancel the request.
-    let subject = `[OOO] Request ERROR: Supervisor approval required`;
+    let subject = `[OOO] 🚨 Request ERROR: Supervisor approval required 🧾`;
     MailApp.sendEmail(
       email,
       subject,
@@ -301,7 +303,7 @@ function process(row) {
     row[Header.EventCreated] = EventCreated.Canceled;
 
     Logger.log(
-      `ERROR: Approval denied, email sent, row=${JSON.stringify(row)}`
+      `ERROR: Supervise Approval denied, email sent, row=${JSON.stringify(row)}`
     );
     SpreadsheetApp.getUi().alert(
       `ERROR: ${name} must secure Superivsor approval before requesting time OOO. See row row=${JSON.stringify(
@@ -310,7 +312,7 @@ function process(row) {
     );
   } else if (HRApproval == HRApproval.NotApproved) {
     // If HR denied, send an error email and cancel the request.
-    let subject = `[OOO] Request ERROR: HR denied your request`;
+    let subject = `[OOO] 🚨 Request ERROR: HR denied your request 🙅🏼‍♀️`;
     MailApp.sendEmail(
       email,
       subject,
@@ -324,7 +326,7 @@ function process(row) {
     row[Header.EventCreated] = EventCreated.Canceled;
 
     Logger.log(
-      `ERROR: Approval denied, email sent, row=${JSON.stringify(row)}`
+      `ERROR: HR Approval denied, email sent, row=${JSON.stringify(row)}`
     );
     SpreadsheetApp.getUi().alert(
       `ERROR: HR has denied this request for ${name}. See row row=${JSON.stringify(
@@ -333,7 +335,7 @@ function process(row) {
     );
   } else if (incrementEndDate.getTime() < incrementStartDate.getTime()) {
     // If startDate after endDate, send an error email and cancel the request.
-    let subject = `[OOO] Request ERROR: Only God transcends time`;
+    let subject = `[OOO] 🚨 Request ERROR: Only God transcends time ⌛️`;
     MailApp.sendEmail(
       email,
       subject,
@@ -347,7 +349,7 @@ function process(row) {
     row[Header.EventCreated] = EventCreated.Canceled;
 
     Logger.log(
-      `ERROR: Requested dates invalid, email sent, row=${JSON.stringify(row)}`
+      `ERROR: Requested invalid dates, email sent, row=${JSON.stringify(row)}`
     );
     SpreadsheetApp.getUi().alert(
       `ERROR: ${name} has requested to time travel without a proper permit. See row row=${JSON.stringify(
@@ -378,16 +380,28 @@ function process(row) {
     row[Header.EventCreated] = EventCreated.Created;
 
     Logger.log(
-      `Approved calendar event for ${name} created, row=${JSON.stringify(row)}`
+      `Created OOO request for ${name} created, row=${JSON.stringify(row)}`
     );
   } else {
     // For any other error, send an email and cancel the request.
-    let subject = `[OOO] ERROR: Unexpected error occurred`;
+    let subject = `[OOO] 🚨 Request ERROR: Unexpected exception occurred 🧐`;
+    MailApp.sendEmail(
+      email,
+      subject,
+      "Notification sent to joshmckenna+error@grace-bible.org for more details. Please pay close attention to your typing and submitted details when you resubmit your request.",
+      {
+        name: "Out of office (OOO) automation ERROR",
+        cc: "joshmckenna+error@grace-bible.org",
+        bcc: replyall,
+      }
+    );
     MailApp.sendEmail(
       "joshmckenna+error@grace-bible.org",
       subject,
-      "Notification sent to joshmckenna+error@grace-bible.org for more details. Please pay close attention to your typing and submitted details when you resubmit your request.",
-      { name: "Out of office (OOO) automation ERROR", cc: email, bcc: replyall }
+      `Unexpexted fatal request error for ${name} at row row=${JSON.stringify(
+        row
+      )} in ${sheetURL}`,
+      { name: "Out of office (OOO) automation ERROR", cc: email }
     );
     row[Header.EventCreated] = EventCreated.Canceled;
 
