@@ -25,7 +25,7 @@ const Header = {
   Description: "Brief description",
   SuperAddress: "Supervisor email",
   SupervisorApproval: "My supervisor has already approved this request",
-  HRApproval: "HR approval",
+  HRApproval: "Director approval",
   EventCreated: "Calendar event status",
   LogErrors: "Errors",
 };
@@ -51,10 +51,9 @@ const Campus = {
  * SW = grace-bible.org_4rtpbu8ot1fdsf5i7sl3dvkl2k@group.calendar.google.com
  */
 
-const OOOcal =
-  "grace-bible.org_323330343338383235@resource.calendar.google.com";
+const OOOcal = "c_1885rf0ddspgoijnkn0tf7j737ak8@resource.calendar.google.com";
 
-const OOOemail = "janineford@grace-bible.org, madelineechols@grace-bible.org";
+const OOOemail = "fellowsprogram@grace-bible.org";
 
 const SupervisorApproval = {
   Approved: "Approved",
@@ -91,6 +90,12 @@ function onOpen() {
 function createTimeDrivenTriggers() {
   // Trigger every 1 hour.
   ScriptApp.newTrigger("eventSetup").timeBased().everyHours(1).create();
+  // Trigger every Monday at 09:00.
+  // ScriptApp.newTrigger('eventSetup')
+  //     .timeBased()
+  //     .onWeekDay(ScriptApp.WeekDay.MONDAY)
+  //     .atHour(7)
+  //     .create();
 }
 
 /**
@@ -112,7 +117,7 @@ function formSetup() {
   }
 
   // Create the form.
-  let form = FormApp.create("Out of office (OOO) request")
+  let form = FormApp.create("Fellows out of office (OOO) request")
     .setCollectEmail(true)
     .setDestination(FormApp.DestinationType.SPREADSHEET, sheet.getId())
     .setLimitOneResponsePerUser(false);
@@ -288,7 +293,7 @@ function process(row) {
     `${name} has requested supervisor-approved ${reason} out-of-office from ${startDate.toDateString()} until ${endDate.toDateString()}\n\n` +
     `Reason: ${reason}\n\n` +
     `${description}\n\n` +
-    `To discuss this request, "Reply All" to include Human Resources, the Supervisor, and the Employee on the thread.`;
+    `To discuss this request, "Reply All" to include Fellows Program staff, the Supervisor, and the requesting Fellow on the thread.`;
 
   /* Confirm that the supervisor approved. */
   if (superApproval == SupervisorApproval.NotApproved) {
@@ -325,12 +330,12 @@ function process(row) {
         `${email} was notified to resubmit the request after contact their Supervisor.`
     );
   } else if (HRApproval == HRApproval.NotApproved) {
-    // If HR denied, send an error email and cancel the request.
-    let subject = `[OOO] 🚨 Request ERROR: HR denied your request 🙅🏼‍♀️`;
+    // If Directors denied, send an error email and cancel the request.
+    let subject = `[OOO] 🚨 Request ERROR: Directors denied your request 🙅🏼‍♀️`;
     MailApp.sendEmail(
       email,
       subject,
-      "Please contact HR immediately for more details. Do NOT resubmit your request without contacting HR.",
+      "Please contact Fellows Directors immediately for more details. Do NOT resubmit your request without contacting Fellows Directors.",
       {
         name: "Out of office (OOO) automation ERROR",
         cc: replyall,
@@ -340,19 +345,21 @@ function process(row) {
     row[Header.EventCreated] = EventCreated.Canceled;
 
     Logger.log(
-      `ERROR: HR Approval denied, email sent to ${email}; row=${JSON.stringify(
+      `ERROR: Fellows Director Approval denied, email sent to ${email}; row=${JSON.stringify(
         row.rowNumber
       )}`
     );
 
-    row[Header.LogErrors] = `ERROR: HR Approval denied, email sent to ${email}`;
+    row[
+      Header.LogErrors
+    ] = `ERROR: Fellows Director Approval denied, email sent to ${email}`;
 
     SpreadsheetApp.getUi().alert(
-      `ERROR: ${name} requires HR approval before requesting time OOO.\n\n` +
+      `ERROR: ${name} requires Fellows Director approval before requesting time OOO.\n\n` +
         `See row ${JSON.stringify(
           row.rowNumber
         )} for the canceled request.\n\n` +
-        `${email} was notified to contact HR for more information.`
+        `${email} was notified to contact Fellows Directors for more information.`
     );
   } else if (incrementEndDate.getTime() < incrementStartDate.getTime()) {
     // If startDate after endDate, send an error email and cancel the request.
