@@ -1,0 +1,26 @@
+{
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "deploy_staff",
+      "problemMatcher": ["$eslint-stylish"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "label": "Staff",
+      "detail": "Deploy code to staff environment"
+    },
+    {
+      "type": "npm",
+      "script": "deploy_fellows",
+      "problemMatcher": ["$eslint-stylish"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "label": "Fellows",
+      "detail": "Deploy code to interns environment"
+    }
+  ]
+}
