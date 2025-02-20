@@ -313,22 +313,15 @@ function process(row) {
     row[Header.EventCreated] = EventCreated.Canceled;
 
     Logger.log(
-      `ERROR: Not supervisor approved, email sent to ${email}; row=${JSON.stringify(
-        row.rowNumber
-      )}`
-    );
-
-    row[
-      Header.LogErrors
-    ] = `ERROR: Not supervisor approved, email sent to ${email}`;
-
-    SpreadsheetApp.getUi().alert(
       `ERROR: ${name} requires Supervisor approval before requesting time OOO.\n\n` +
         `See row ${JSON.stringify(
           row.rowNumber
         )} for the canceled request.\n\n` +
         `${email} was notified to resubmit the request after contact their Supervisor.`
     );
+
+    row[Header.LogErrors] = `ERROR: Not supervisor approved, email sent to ${email}`;
+
   } else if (HRApproval == HRApproval.NotApproved) {
     // If Directors denied, send an error email and cancel the request.
     let subject = `[OOO] 🚨 Request ERROR: Directors denied your request 🙅🏼‍♀️`;
@@ -345,22 +338,15 @@ function process(row) {
     row[Header.EventCreated] = EventCreated.Canceled;
 
     Logger.log(
-      `ERROR: Fellows Director Approval denied, email sent to ${email}; row=${JSON.stringify(
-        row.rowNumber
-      )}`
-    );
-
-    row[
-      Header.LogErrors
-    ] = `ERROR: Fellows Director Approval denied, email sent to ${email}`;
-
-    SpreadsheetApp.getUi().alert(
       `ERROR: ${name} requires Fellows Director approval before requesting time OOO.\n\n` +
         `See row ${JSON.stringify(
           row.rowNumber
         )} for the canceled request.\n\n` +
         `${email} was notified to contact Fellows Directors for more information.`
     );
+
+    row[Header.LogErrors] = `ERROR: Fellows Director Approval denied, email sent to ${email}`;
+
   } else if (incrementEndDate.getTime() < incrementStartDate.getTime()) {
     // If startDate after endDate, send an error email and cancel the request.
     let subject = `[OOO] 🚨 Request ERROR: Only God transcends time ⌛️`;
@@ -377,20 +363,15 @@ function process(row) {
     row[Header.EventCreated] = EventCreated.Canceled;
 
     Logger.log(
-      `ERROR: Invalid dates, email sent to ${email}; row=${JSON.stringify(
-        row.rowNumber
-      )}`
-    );
-
-    row[Header.LogErrors] = `ERROR: Invalid dates, email sent to ${email}`;
-
-    SpreadsheetApp.getUi().alert(
       `ERROR: ${name} requested time travel without a proper permit.\n\n` +
         `See row ${JSON.stringify(
           row.rowNumber
         )} for the canceled request.\n\n` +
         `${email} was notified to resubmit the request with valid dates.`
     );
+
+    row[Header.LogErrors] = `ERROR: Invalid dates, email sent to ${email}`;
+
   } else if (!validateEmails(supervisor)) {
     // If supervisor is an invalid email, send an error email and cancel the request.
     let subject = `[OOO] 🚨 Request ERROR: Invalid email address 📧`;
@@ -407,22 +388,15 @@ function process(row) {
     row[Header.EventCreated] = EventCreated.Canceled;
 
     Logger.log(
-      `ERROR: Invalid supervisor email  ${supervisor}  email sent to ${email}; row=${JSON.stringify(
-        row.rowNumber
-      )}`
-    );
-
-    row[
-      Header.LogErrors
-    ] = `ERROR: Invalid supervisor email  ${supervisor}  email sent to ${email}`;
-
-    SpreadsheetApp.getUi().alert(
       `ERROR: ${name} specified an invalid supervisor email address.\n\n` +
         `See row ${JSON.stringify(
           row.rowNumber
         )} for the canceled request.\n\n` +
         `${email} was notified to resubmit the request with valid dates.`
     );
+
+    row[Header.LogErrors] = `ERROR: Invalid supervisor email  ${supervisor}  email sent to ${email}`;
+
   } else if (
     superApproval == SupervisorApproval.Approved &&
     hrApproval != HRApproval.NotApproved &&
@@ -476,20 +450,12 @@ function process(row) {
     row[Header.EventCreated] = EventCreated.Canceled;
 
     Logger.log(
-      `Unexpexted fatal error, email sent to ${email} and to joshmckenna+error@grace-bible.org; row=${JSON.stringify(
-        row.rowNumber
-      )}`
-    );
-
-    row[
-      Header.LogErrors
-    ] = `ERROR: Unexpexted fatal error, email sent to ${email} and to joshmckenna+error@grace-bible.org`;
-
-    SpreadsheetApp.getUi().alert(
       `ERROR: Unexpexted fatal error at row ${JSON.stringify(
         row.rowNumber
       )} email sent to ${email} and to joshmckenna+error@grace-bible.org to investigate.`
     );
+
+    row[Header.LogErrors] = `ERROR: Unexpexted fatal error, email sent to ${email} and to joshmckenna+error@grace-bible.org`;
   }
 
   return row;
